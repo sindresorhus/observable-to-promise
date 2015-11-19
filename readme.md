@@ -17,8 +17,9 @@ $ npm install --save observable-to-promise
 ```js
 const observableToPromise = require('observable-to-promise');
 
-observableToPromise(Observable.of(1, 2)).then(() => {
-	console.log('done');
+observableToPromise(Observable.of(1, 2)).then((result) => {
+	console.log(result);
+	// => [1, 2]
 });
 ```
 
