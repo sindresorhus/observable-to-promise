@@ -1,0 +1,38 @@
+{
+  "name": "observable-to-promise",
+  "version": "0.0.0",
+  "description": "Convert an Observable to a Promise",
+  "license": "MIT",
+  "repository": "sindresorhus/observable-to-promise",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "observable",
+    "observables",
+    "promise",
+    "promises",
+    "convert"
+  ],
+  "dependencies": {
+    "is-observable": "^0.1.0",
+    "symbol-observable": "^0.1.0"
+  },
+  "devDependencies": {
+    "ava": "*",
+    "is-promise": "^2.1.0",
+    "xo": "*",
+    "zen-observable": "^0.1.6"
+  }
+}
