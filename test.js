@@ -6,19 +6,19 @@ import fn from './';
 // for `zen-observable` on Node.js 0.10
 global.Promise = Promise;
 
-test(t => {
+test('observable to promise', t => {
 	t.true(isPromise(fn(zenObservable.of(1, 2))));
 	t.end();
 });
 
-test(t => {
+test('ensures it always ends up being a promise', t => {
 	fn(2).then(x => {
 		t.is(x, 2);
 		t.end();
 	});
 });
 
-test(t => {
+test('passes values through', t => {
 	fn(zenObservable.of(1, 2))
 	.then(result => {
 		t.same(result, [1, 2]);

@@ -2,17 +2,18 @@
 var isObservable = require('is-observable');
 var symbolObservable = require('symbol-observable');
 
-module.exports = function (x) {
-	if (isObservable(x)) {
-		var result = [];
-
-		return x[symbolObservable]().forEach(function (value) {
-			result.push(value);
-		})
-		.then(function () {
-			return result;
-		});
+module.exports = function (val) {
+	if (!isObservable(val)) {
+		return Promise.resolve(val);
 	}
 
-	return Promise.resolve(x);
+	var ret = [];
+
+	return val[symbolObservable]()
+		.forEach(function (x) {
+			ret.push(x);
+		})
+		.then(function () {
+			return ret;
+		});
 };
