@@ -10,8 +10,8 @@ test('observable to promise', t => {
 	t.true(isPromise(fn(zenObservable.of(1, 2))));
 });
 
-test('ensures it always ends up being a promise', async t => {
-	t.is(await fn(2), 2);
+test('throw an error when an non observable is given', async t => {
+	t.throws(() => fn(2), TypeError);
 });
 
 test('passes values through', async t => {

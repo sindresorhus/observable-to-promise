@@ -2,8 +2,6 @@
 
 > Convert an [Observable](https://github.com/zenparsing/es-observable) to a Promise
 
-Other values are just passed through.
-
 
 ## Install
 
