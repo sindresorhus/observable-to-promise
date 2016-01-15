@@ -4,7 +4,7 @@ var symbolObservable = require('symbol-observable');
 
 module.exports = function (val) {
 	if (!isObservable(val)) {
-		return Promise.resolve(val);
+		throw new TypeError('Expected an observable');
 	}
 
 	var ret = [];
