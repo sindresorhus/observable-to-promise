@@ -15,5 +15,5 @@ test('throw an error when an non observable is given', async t => {
 });
 
 test('passes values through', async t => {
-	t.same(await fn(zenObservable.of(1, 2)), [1, 2]);
+	t.deepEqual(await fn(zenObservable.of(1, 2)), [1, 2]);
 });
