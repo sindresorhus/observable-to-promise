@@ -29,4 +29,4 @@ observableToPromise(Observable.of(1, 2)).then((result) => {
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)
