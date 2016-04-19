@@ -26,8 +26,8 @@
     "convert"
   ],
   "dependencies": {
-    "is-observable": "^0.1.0",
-    "symbol-observable": "^0.1.0"
+    "is-observable": "^0.2.0",
+    "symbol-observable": "^0.2.2"
   },
   "devDependencies": {
     "ava": "*",
