@@ -3,6 +3,8 @@ import isPromise from 'is-promise';
 
 import zenObservable from 'zen-observable';
 import xs from 'xstream';
+import Rx from 'rxjs';
+import * as most from 'most';
 
 import toPromise from './';
 
@@ -34,7 +36,7 @@ function commonTests() {
 }
 
 /* run common tests */
-commonTests()
+commonTests();
 
 /* run tests for zenObservable */
 let zenFrom = array => zenObservable.from(array);
@@ -43,3 +45,11 @@ testOneLib('zenObservable', zenFrom);
 /* run tests for xstream */
 let xsFrom = array => xs.from(array);
 testOneLib('xstream', xsFrom);
+
+/* run tests for RxJS 5 */
+let rxFrom = array => Rx.Observable.from(array);
+testOneLib('RxJS 5', rxFrom);
+
+/* run tests for most */
+let mostFrom = array => most.from(array);
+testOneLib('most', mostFrom);
