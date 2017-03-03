@@ -9,11 +9,11 @@ module.exports = function (val) {
 
 	var ret = [];
 
-	return val[symbolObservable]()
-		.forEach(function (x) {
-			ret.push(x);
-		})
-		.then(function () {
-			return ret;
-		});
+	return new Promise(resolve => {
+		val[symbolObservable]()
+			.subscribe({
+				next: x => ret.push(x),
+				complete: () => resolve(ret)
+			});
+	});
 };
