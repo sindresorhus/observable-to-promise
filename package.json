@@ -33,6 +33,7 @@
     "ava": "*",
     "is-promise": "^2.1.0",
     "xo": "*",
+    "xstream": "^10.2.0",
     "zen-observable": "^0.2.1"
   }
 }

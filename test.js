@@ -1,19 +1,45 @@
 import test from 'ava';
-import zenObservable from 'zen-observable';
 import isPromise from 'is-promise';
+
+import zenObservable from 'zen-observable';
+import xs from 'xstream';
+
 import m from './';
 
 // for `zen-observable` on Node.js 0.10
 global.Promise = Promise;
 
-test('observable to promise', t => {
-	t.true(isPromise(m(zenObservable.of(1, 2))));
-});
+let array = [1, 2];
 
-test('throw an error when an non observable is given', async t => {
-	t.throws(() => m(2), TypeError);
-});
+/**
+ * Run tests for a given observable library
+ *
+ * @param libName {string} the name of the lib under test
+ * @param fromArray {(Array) => Observable} constructor of observable from array
+ */
+function testOneLib(libName, fromArray) {
+	test(`${libName}: observable to promise`, t => {
+		t.true(isPromise(m(fromArray(array))));
+	});
 
-test('passes values through', async t => {
-	t.deepEqual(await m(zenObservable.of(1, 2)), [1, 2]);
-});
+	test(`${libName}: passes values through`, async t => {
+		t.deepEqual(array, await m(fromArray(array)));
+	});
+}
+
+function commonTests() {
+	test('throw an error when an non observable is given', async t => {
+		t.throws(() => m(2), TypeError);
+	});
+}
+
+/* run common tests */
+commonTests()
+
+/* run tests for zenObservable */
+let zenFrom = array => zenObservable.from(array);
+testOneLib('zenObservable', zenFrom);
+
+/* run tests for xstream */
+let xsFrom = array => xs.from(array);
+testOneLib('xstream', xsFrom);
