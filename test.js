@@ -4,7 +4,7 @@ import isPromise from 'is-promise';
 import zenObservable from 'zen-observable';
 import xs from 'xstream';
 
-import m from './';
+import toPromise from './';
 
 // for `zen-observable` on Node.js 0.10
 global.Promise = Promise;
@@ -19,17 +19,17 @@ let array = [1, 2];
  */
 function testOneLib(libName, fromArray) {
 	test(`${libName}: observable to promise`, t => {
-		t.true(isPromise(m(fromArray(array))));
+		t.true(isPromise(toPromise(fromArray(array))));
 	});
 
 	test(`${libName}: passes values through`, async t => {
-		t.deepEqual(array, await m(fromArray(array)));
+		t.deepEqual(array, await toPromise(fromArray(array)));
 	});
 }
 
 function commonTests() {
 	test('throw an error when an non observable is given', async t => {
-		t.throws(() => m(2), TypeError);
+		t.throws(() => toPromise(2), TypeError);
 	});
 }
 
