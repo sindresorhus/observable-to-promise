@@ -1,3 +1,12 @@
+/**
+ * Tests for observable-to-promise module
+ *
+ * function commonTests() contains tests which dont use any observables
+ *
+ * function testLibs is invoked with the list of pairs: library name,
+ * and fromArray fabric. To add test for one more library just pass
+ * one more array to the `testLibs` function.
+ */
 import test from 'ava';
 import isPromise from 'is-promise';
 
@@ -19,7 +28,7 @@ let array = [1, 2];
  * @param libName {string} the name of the lib under test
  * @param fromArray {(Array) => Observable} constructor of observable from array
  */
-function testOneLib(libName, fromArray) {
+function testOneLib([libName, fromArray]) {
 	test(`${libName}: observable to promise`, t => {
 		t.true(isPromise(toPromise(fromArray(array))));
 	});
@@ -29,27 +38,37 @@ function testOneLib(libName, fromArray) {
 	});
 }
 
+/**
+ * Run tests for the list of libs
+ *
+ * @param libs {[libName, fromArray]}
+ */
+function testLibs(libs) {
+	libs.forEach(testOneLib);
+}
+
+/**
+ * Run tests not related to any lib
+ */
 function commonTests() {
 	test('throw an error when an non observable is given', async t => {
 		t.throws(() => toPromise(2), TypeError);
 	});
 }
 
-/* run common tests */
+/* run tests that don't use any observables */
 commonTests();
 
-/* run tests for zenObservable */
+/* prepare the 'fromArray' constructor for each lib */
 let zenFrom = array => zenObservable.from(array);
-testOneLib('zenObservable', zenFrom);
-
-/* run tests for xstream */
 let xsFrom = array => xs.from(array);
-testOneLib('xstream', xsFrom);
-
-/* run tests for RxJS 5 */
 let rxFrom = array => Rx.Observable.from(array);
-testOneLib('RxJS 5', rxFrom);
-
-/* run tests for most */
 let mostFrom = array => most.from(array);
-testOneLib('most', mostFrom);
+
+/* finally, run the tests for all libs */
+testLibs([
+	['zenObservable', zenFrom],
+	['xstream', xsFrom],
+	['RxJS 5', rxFrom],
+	['most', mostFrom]
+]);
