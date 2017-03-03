@@ -9,10 +9,11 @@ module.exports = function (val) {
 
 	var ret = [];
 
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
 		val[symbolObservable]()
 			.subscribe({
 				next: x => ret.push(x),
+				error: err => reject(err),
 				complete: () => resolve(ret)
 			});
 	});
