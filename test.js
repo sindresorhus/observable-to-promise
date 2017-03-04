@@ -3,9 +3,13 @@
  *
  * function commonTests() contains tests which don't use any observables
  *
- * function testLibs() is invoked with the list of : library name,
- * and fromArray fabric. To add test for one more library just pass
- * one more array to the `testLibs` function.
+ * function testWithLibs() invoked with array of items, that each contains
+ * library name and two functions:
+ * - constructor of observable from array: (Array) => Observable
+ * - constructor of observable which terminates with an error: () => Observable
+ *
+ * To add under the test one more library just prepare and pass one more array
+ * to the `testWithLibs` function.
  */
 import test from 'ava';
 import isPromise from 'is-promise';
@@ -24,10 +28,10 @@ global.Promise = Promise;
  * Run tests for a given observable library
  *
  * @param libName {string} the name of the lib under test
- * @param fromArray {(Array) => Observable} constructor of observable from array
+ * @param fromArray {(Array) => Observable} constructs observable from array
  * @param failed {() => Observable} returns an observable that terminates with error
  */
-function testOneLib([libName, fromArray, failed]) {
+function testWithALib([libName, fromArray, failed]) {
 	let array = [1, 2];
 
 	test(`${libName}: observable to promise`, t => {
@@ -51,8 +55,8 @@ function testOneLib([libName, fromArray, failed]) {
  *
  * @param libs {[libName, fromArray]}
  */
-function testLibs(libs) {
-	libs.forEach(testOneLib);
+function testWithLibs(libs) {
+	libs.forEach(testWithALib);
 }
 
 /** Run tests not using any observables */
@@ -81,8 +85,8 @@ let rxFailed = () => Rx.Observable.fromPromise(rejected());
 let mostFrom = array => most.from(array);
 let mostFailed = () => most.fromPromise(rejected());
 
-/* finally, run the tests for all libs */
-testLibs([
+/* finally, run tests with prepared constructors */
+testWithLibs([
 	['zen-observable', zenFrom, zenFailed],
 	['xstream', xsFrom, xsFailed],
 	['RxJS 5', rxFrom, rxFailed],
