@@ -1,20 +1,23 @@
 'use strict';
-var isObservable = require('is-observable');
-var symbolObservable = require('symbol-observable');
+const isObservable = require('is-observable');
+const symbolObservable = require('symbol-observable').default;
 
-module.exports = function (val) {
+module.exports = val => {
 	if (!isObservable(val)) {
-		throw new TypeError('Expected an observable');
+		throw new TypeError('Expected an Observable');
 	}
 
-	var ret = [];
+	const ret = [];
 
 	return new Promise((resolve, reject) => {
-		val[symbolObservable]()
-			.subscribe({
-				next: x => ret.push(x),
-				error: err => reject(err),
-				complete: () => resolve(ret)
-			});
+		val[symbolObservable]().subscribe({
+			next: x => {
+				ret.push(x);
+			},
+			error: reject,
+			complete: () => {
+				resolve(ret);
+			}
+		});
 	});
 };

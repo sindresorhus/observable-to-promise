@@ -10,7 +10,7 @@
     "url": "sindresorhus.com"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "xo && ava"
@@ -23,19 +23,20 @@
     "observables",
     "promise",
     "promises",
-    "convert"
+    "convert",
+    "subscribe"
   ],
   "dependencies": {
     "is-observable": "^0.2.0",
-    "symbol-observable": "^0.2.2"
+    "symbol-observable": "^1.0.4"
   },
   "devDependencies": {
     "ava": "*",
-    "is-promise": "^2.1.0",
     "most": "^1.2.2",
+    "p-is-promise": "^1.1.0",
     "rxjs": "^5.2.0",
     "xo": "*",
     "xstream": "^10.2.0",
-    "zen-observable": "^0.2.1"
+    "zen-observable": "^0.5.0"
   }
 }

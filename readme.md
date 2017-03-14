@@ -1,6 +1,6 @@
 # observable-to-promise [![Build Status](https://travis-ci.org/sindresorhus/observable-to-promise.svg?branch=master)](https://travis-ci.org/sindresorhus/observable-to-promise)
 
-> Convert an [Observable](https://github.com/zenparsing/es-observable) to a Promise
+> Convert an [Observable](https://github.com/tc39/proposal-observable) to a Promise
 
 
 ## Install
