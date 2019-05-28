@@ -2,21 +2,21 @@
 const isObservable = require('is-observable');
 const symbolObservable = require('symbol-observable').default;
 
-module.exports = val => {
-	if (!isObservable(val)) {
-		throw new TypeError('Expected an Observable');
+module.exports = async value => {
+	if (!isObservable(value)) {
+		throw new TypeError(`Expected an \`Observable\`, got \`${typeof value}\``);
 	}
 
-	const ret = [];
+	const values = [];
 
 	return new Promise((resolve, reject) => {
-		val[symbolObservable]().subscribe({
-			next: x => {
-				ret.push(x);
+		value[symbolObservable]().subscribe({
+			next: value => {
+				values.push(value);
 			},
 			error: reject,
 			complete: () => {
-				resolve(ret);
+				resolve(values);
 			}
 		});
 	});

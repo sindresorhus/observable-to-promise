@@ -6,7 +6,7 @@
 ## Install
 
 ```
-$ npm install --save observable-to-promise
+$ npm install observable-to-promise
 ```
 
 
@@ -15,18 +15,15 @@ $ npm install --save observable-to-promise
 ```js
 const observableToPromise = require('observable-to-promise');
 
-observableToPromise(Observable.of(1, 2)).then(result => {
-	console.log(result);
+(async () => {
+	const promise = observableToPromise(Observable.of(1, 2));
+
+	console.log(await promise);
 	//=> [1, 2]
-});
+})();
 ```
 
 
 ## Related
 
 - [is-observable](https://github.com/sindresorhus/is-observable) - Check if a value is an Observable
-
-
-## License
-
-MIT © [Sindre Sorhus](https://sindresorhus.com)
