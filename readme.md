@@ -1,4 +1,4 @@
-# observable-to-promise [![Build Status](https://travis-ci.org/sindresorhus/observable-to-promise.svg?branch=master)](https://travis-ci.org/sindresorhus/observable-to-promise)
+# observable-to-promise
 
 > Convert an [Observable](https://github.com/tc39/proposal-observable) to a Promise
 
