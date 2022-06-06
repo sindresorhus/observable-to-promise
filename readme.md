@@ -2,27 +2,22 @@
 
 > Convert an [Observable](https://github.com/tc39/proposal-observable) to a Promise
 
-
 ## Install
 
+```sh
+npm install observable-to-promise
 ```
-$ npm install observable-to-promise
-```
-
 
 ## Usage
 
 ```js
-const observableToPromise = require('observable-to-promise');
+import observableToPromise from 'observable-to-promise';
 
-(async () => {
-	const promise = observableToPromise(Observable.of(1, 2));
+const promise = observableToPromise(Observable.of(1, 2));
 
-	console.log(await promise);
-	//=> [1, 2]
-})();
+console.log(await promise);
+//=> [1, 2]
 ```
-
 
 ## Related
 

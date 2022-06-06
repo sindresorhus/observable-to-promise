@@ -4,7 +4,7 @@ import ZenObservable from 'zen-observable';
 import xs from 'xstream';
 import {from as rxFrom} from 'rxjs';
 import * as most from 'most';
-import toPromise from '.';
+import toPromise from './index.js';
 
 // Run tests for a given observable library
 function testWithALib([libraryName, fromArray, failed]) {
@@ -25,13 +25,15 @@ function testWithALib([libraryName, fromArray, failed]) {
 
 // Run tests for the list of libraries
 function testWithLibs(libraries) {
-	libraries.forEach(testWithALib);
+	for (const library of libraries) {
+		testWithALib(library);
+	}
 }
 
 // Run tests not using any observables
 function commonTests() {
 	test('throw an error when an non-observable is given', async t => {
-		await t.throwsAsync(toPromise(2), TypeError);
+		await t.throwsAsync(toPromise(2), {instanceOf: TypeError});
 	});
 }
 
@@ -47,8 +49,8 @@ const rejected = async () => {
 const zenFrom = array => ZenObservable.from(array);
 const zenFailed = () => new ZenObservable(observer => observer.error(reason));
 
-const xsFrom = array => xs.from(array);
-const xsFailed = () => xs.fromPromise(rejected());
+const xsFrom = array => xs.default.from(array);
+const xsFailed = () => xs.default.fromPromise(rejected());
 
 const rxFailed = () => rxFrom(rejected());
 
@@ -60,5 +62,5 @@ testWithLibs([
 	['zen-observable', zenFrom, zenFailed],
 	['xstream', xsFrom, xsFailed],
 	['RxJS 5', rxFrom, rxFailed],
-	['most', mostFrom, mostFailed]
+	['most', mostFrom, mostFailed],
 ]);
