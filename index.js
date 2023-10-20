@@ -15,7 +15,7 @@ export default async function observableToPromise(value, maximumValues = 0) {
 			next(value) {
 				if (maximumValues > 0 && count < maximumValues) {
 					values.push(value);
-					maximumValues += 1;
+					count += 1;
 				}
 
 				if (maximumValues === 0) {
