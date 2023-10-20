@@ -8,7 +8,7 @@ export default async function observableToPromise(value, maximumValues = 0) {
 	}
 
 	const values = [];
-	const count = 0;
+	let count = 0;
 
 	return new Promise((resolve, reject) => {
 		value[symbolObservable.default]().subscribe({
