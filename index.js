@@ -2,6 +2,12 @@
 import isObservable from 'is-observable';
 import symbolObservable from 'symbol-observable';
 
+/**
+ * @template T
+ * @param {Observable<T>} value
+ * @param {number} param1
+ * @returns {Promise<T[]>}
+ */
 export default async function observableToPromise(value, {maximumValues = 0}) {
 	if (!isObservable(value)) {
 		throw new TypeError(`Expected an \`Observable\`, got \`${typeof value}\``);

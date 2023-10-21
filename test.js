@@ -8,18 +8,18 @@ import toPromise from './index.js';
 
 // Run tests for a given observable library
 function testWithALib([libraryName, fromArray, failed]) {
-	const fixture = [1, 2];
+	const fixture = [1, 2, 3, 4, 5];
 
 	test(`${libraryName}: observable to promise`, t => {
-		t.true(pIsPromise(toPromise(fromArray(fixture))));
+		t.true(pIsPromise(toPromise(fromArray(fixture), Math.floor(Math.random() * 5))));
 	});
 
 	test(`${libraryName}: passes values through`, async t => {
-		t.deepEqual(await toPromise(fromArray(fixture)), fixture);
+		t.deepEqual(await toPromise(fromArray(fixture), Math.floor(Math.random() * 5)), fixture);
 	});
 
 	test(`${libraryName}: rejects on error in observable`, async t => {
-		await t.throwsAsync(toPromise(failed()));
+		await t.throwsAsync(toPromise(failed(), Math.floor(Math.random() * 5)));
 	});
 }
 
