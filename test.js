@@ -8,17 +8,33 @@ import toPromise from './index.js';
 
 // Run tests for a given observable library
 function testWithALib([libraryName, fromArray, failed]) {
-	const fixture = [1, 2, 3, 4, 5];
+	const fixture = [1, 2];
 
 	test(`${libraryName}: observable to promise`, t => {
-		t.true(pIsPromise(toPromise(fromArray(fixture), Math.floor(Math.random() * 5))));
+		t.true(pIsPromise(toPromise(fromArray(fixture))));
 	});
 
 	test(`${libraryName}: passes values through`, async t => {
-		t.deepEqual(await toPromise(fromArray(fixture), Math.floor(Math.random() * 5)), fixture);
+		t.deepEqual(await toPromise(fromArray(fixture)), fixture);
 	});
 
 	test(`${libraryName}: rejects on error in observable`, async t => {
+		await t.throwsAsync(toPromise(failed()));
+	});
+}
+
+function testWithALibAndOptions([libraryName, fromArray, failed]) {
+	const fixture = [1, 2, 3, 4, 5];
+
+	test(`${libraryName}: observable to promise with maximum values`, t => {
+		t.true(pIsPromise(toPromise(fromArray(fixture), Math.floor(Math.random() * 5))));
+	});
+
+	test(`${libraryName}: passes values through with maximum values`, async t => {
+		t.deepEqual(await toPromise(fromArray(fixture), Math.floor(Math.random() * 5)), fixture);
+	});
+
+	test(`${libraryName}: rejects on error in observable with maximum values`, async t => {
 		await t.throwsAsync(toPromise(failed(), Math.floor(Math.random() * 5)));
 	});
 }
@@ -26,6 +42,7 @@ function testWithALib([libraryName, fromArray, failed]) {
 // Run tests for the list of libraries
 function testWithLibs(libraries) {
 	for (const library of libraries) {
+		testWithALibAndOptions(library);
 		testWithALib(library);
 	}
 }
