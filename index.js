@@ -4,8 +4,8 @@ import symbolObservable from 'symbol-observable';
 
 /**
  * @template T
- * @param {Observable<T>} value
- * @param {number} param1
+ * @param {T extends unknown<T>} value
+ * @param {{maximumValues?: number}} options
  * @returns {Promise<T[]>}
  */
 export default async function observableToPromise(value, options) {
