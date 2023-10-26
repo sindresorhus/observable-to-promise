@@ -8,8 +8,7 @@ import symbolObservable from 'symbol-observable';
  * @param {{maximumValues?: number}} options
  * @returns {Promise<T[]>}
  */
-export default async function observableToPromise(value, options) {
-	const {maximumValues = 0} = options || {};
+export default async function observableToPromise(value, {maximumValues = 0} = {}) {
 
 	if (!isObservable(value)) {
 		throw new TypeError(`Expected an \`Observable\`, got \`${typeof value}\``);
