@@ -17,7 +17,7 @@ export default async function observableToPromise(value, {maximumValues = 0} = {
 	let count = 0;
 
 	return new Promise((resolve, reject) => {
-		value[symbolObservable.default]().subscribe({
+		const subscription = value[symbolObservable.default]().subscribe({
 			next(value) {
 				if (maximumValues > 0 && count < maximumValues) {
 					values.push(value);
@@ -26,6 +26,11 @@ export default async function observableToPromise(value, {maximumValues = 0} = {
 
 				if (maximumValues === 0) {
 					values.push(value);
+				}
+
+				if (maximumValues === (count - 1)) {
+					console.log('closing');
+					subscription.unsubcribe();
 				}
 			},
 			error: reject,

@@ -25,17 +25,14 @@ function testWithALib([libraryName, fromArray, failed]) {
 
 function testWithALibAndOptions([libraryName, fromArray, failed]) {
 	const fixture = [1, 2, 3, 4, 5];
+	const maximumValues = 3;
 
-	test(`${libraryName}: observable to promise with maximum values`, t => {
-		t.true(pIsPromise(toPromise(fromArray(fixture), Math.floor(Math.random() * 5))));
-	});
-
-	test(`${libraryName}: passes values through with maximum values`, async t => {
-		t.deepEqual(await toPromise(fromArray(fixture), Math.floor(Math.random() * 5)), fixture);
+	test(`${libraryName}: return filtered by maximum values`, async t => {
+		t.deepEqual(await toPromise(fromArray(fixture), {maximumValues}), fixture.slice(0, maximumValues));
 	});
 
 	test(`${libraryName}: rejects on error in observable with maximum values`, async t => {
-		await t.throwsAsync(toPromise(failed(), Math.floor(Math.random() * 5)));
+		await t.throwsAsync(toPromise(failed(), {maximumValues}));
 	});
 }
 
