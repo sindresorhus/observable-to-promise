@@ -25,7 +25,7 @@ function testWithALib([libraryName, fromArray, failed]) {
 
 function testWithALibAndOptions([libraryName, fromArray, failed]) {
 	const fixture = [1, 2, 3, 4, 5];
-	const maximumValues = 3;
+	const maximumValues = Math.round(Math.random() * fixture.length);
 
 	test(`${libraryName}: return filtered by maximum values`, async t => {
 		t.deepEqual(await toPromise(fromArray(fixture), {maximumValues}), fixture.slice(0, maximumValues));
