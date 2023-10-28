@@ -14,7 +14,7 @@ export default async function observableToPromise(value, {maximumValues = undefi
 	}
 
 	if (maximumValues < 0) {
-		throw new TypeError(`Expected \`maximumValues higher than 0\`, got \`${maximumValues}\``);
+		throw new Error(`Expected \`maximumValues higher than 0\`, got \`${maximumValues}\``);
 	}
 
 	const values = [];
@@ -34,7 +34,7 @@ export default async function observableToPromise(value, {maximumValues = undefi
 
 				if (maximumValues === (count - 1)) {
 					// eslint-disable-next-line no-warning-comments
-					// TODO close observable
+					// TODO close observable or stop subscription
 				}
 			},
 			error: reject,

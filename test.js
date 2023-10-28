@@ -39,8 +39,8 @@ function testWithALibAndOptions([libraryName, fromArray, failed]) {
 		await t.throwsAsync(toPromise(failed(), {maximumValues: 2}));
 	});
 
-	test(`${libraryName}: rejects on negative maximum value`, async t => {
-		await t.throwsAsync(toPromise(failed(), {maximumValues: -2}));
+	test(`observableToPromise - ${libraryName}: throws on negative maximum value`, async t => {
+		await t.throwsAsync(toPromise(fromArray(fixture), {maximumValues: -2}));
 	});
 }
 
