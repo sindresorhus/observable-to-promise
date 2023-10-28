@@ -12,6 +12,7 @@ npm install observable-to-promise
 
 ```js
 import observableToPromise from 'observable-to-promise';
+import Observable from 'rxjs';
 
 const promise = observableToPromise(Observable.of(1, 2));
 
@@ -22,10 +23,12 @@ console.log(await promise);
 ### Optional: maximum return values:
 ```js
 import observableToPromise from 'observable-to-promise';
+import Observable from 'rxjs';
 
 const promise = observableToPromise(Observable.of(1, 2, 3, 4, 5), {maximumValues: 2});
 
 console.log(await promise);
+
 //=> [1, 2]
 ```
 
