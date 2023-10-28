@@ -38,6 +38,10 @@ function testWithALibAndOptions([libraryName, fromArray, failed]) {
 	test(`${libraryName}: rejects on error in observable with maximum value`, async t => {
 		await t.throwsAsync(toPromise(failed(), {maximumValues: 2}));
 	});
+
+	test(`${libraryName}: rejects on negative maximum value`, async t => {
+		await t.throwsAsync(toPromise(failed(), {maximumValues: -2}));
+	});
 }
 
 // Run tests for the list of libraries
