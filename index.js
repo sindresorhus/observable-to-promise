@@ -8,29 +8,33 @@ import symbolObservable from 'symbol-observable';
  * @param {{maximumValues?: number}} options
  * @returns {Promise<T[]>}
  */
-export default async function observableToPromise(value, {maximumValues = 0} = {}) {
+export default async function observableToPromise(value, {maximumValues = undefined} = {}) {
 	if (!isObservable(value)) {
 		throw new TypeError(`Expected an \`Observable\`, got \`${typeof value}\``);
 	}
 
+	if (maximumValues < 0) {
+		throw new TypeError(`Expected \`maximumValues higher than 0\`, got \`${maximumValues}\``);
+	}
+
 	const values = [];
-	let count = 0;
+	let count = 1;
 
 	return new Promise((resolve, reject) => {
-		const subscription = value[symbolObservable.default]().subscribe({
+		value[symbolObservable.default]().subscribe({
 			next(value) {
-				if (maximumValues > 0 && count < maximumValues) {
+				if (maximumValues > 0 && count <= maximumValues) {
 					values.push(value);
 					count += 1;
 				}
 
-				if (maximumValues === 0) {
+				if (maximumValues === undefined) {
 					values.push(value);
 				}
 
 				if (maximumValues === (count - 1)) {
-					console.log('closing');
-					subscription.unsubcribe();
+					// eslint-disable-next-line no-warning-comments
+					// TODO close observable
 				}
 			},
 			error: reject,
