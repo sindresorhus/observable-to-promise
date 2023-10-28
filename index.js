@@ -13,6 +13,8 @@ export default async function observableToPromise(value, {maximumValues = undefi
 		throw new TypeError(`Expected an \`Observable\`, got \`${typeof value}\``);
 	}
 
+	getObservableLibrary(value);
+
 	if (maximumValues < 0) {
 		throw new Error(`Expected \`maximumValues higher than 0\`, got \`${maximumValues}\``);
 	}
@@ -23,6 +25,7 @@ export default async function observableToPromise(value, {maximumValues = undefi
 	return new Promise((resolve, reject) => {
 		value[symbolObservable.default]().subscribe({
 			next(value) {
+				console.log(count);
 				if (maximumValues > 0 && count <= maximumValues) {
 					values.push(value);
 					count += 1;
@@ -43,4 +46,33 @@ export default async function observableToPromise(value, {maximumValues = undefi
 			},
 		});
 	});
+}
+
+function getObservableLibrary(observable) {
+	if (observable.constructor) {
+		const constructorName = observable.constructor.name;
+		switch (constructorName) {
+			case 'Observable': {
+				return 'RxJS';
+			}
+
+			case 'Stream': {
+				return 'Most.js';
+			}
+
+			case 'ZenObservable': {
+				return 'Zen Observable';
+			}
+
+			case 'XStream': {
+				return 'xstream';
+			}
+
+			default: {
+				return 'Unknown';
+			}
+		}
+	}
+
+	return 'Unknown';
 }
