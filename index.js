@@ -17,25 +17,52 @@ export default async function observableToPromise(value, {maximumValues = undefi
 		throw new Error(`Expected \`maximumValues higher than 0\`, got \`${maximumValues}\``);
 	}
 
-	const takeWhile = await getTakeWhileForLibrary(value);
+	const takeWhile = await getTakeWhileBasedOnLibrary(value);
 
 	const values = [];
 	let count = 1;
 
 	return new Promise((resolve, reject) => {
+		if (maximumValues === undefined) {
+			value[symbolObservable.default]()
+				.subscribe({
+					next(value) {
+						values.push(value);
+					},
+					error: reject,
+					complete() {
+						resolve(values);
+					},
+				});
+			return;
+		}
+
 		if (getObservableLibrary(value) === 'RxJS') {
+			console.log('rxjs');
 			value[symbolObservable.default]()
 				.pipe(takeWhile(() => count <= maximumValues))
 				.subscribe({
 					next(value) {
-						console.log(count);
 						if (maximumValues > 0 && count <= maximumValues) {
 							values.push(value);
 							count += 1;
 						}
+					},
+					error: reject,
+					complete() {
+						resolve(values);
+					},
+				});
+			return;
+		}
 
-						if (maximumValues === undefined) {
+		if (takeWhile === undefined) {
+			value[symbolObservable.default]()
+				.subscribe({
+					next(value) {
+						if (maximumValues > 0 && count <= maximumValues) {
 							values.push(value);
+							count += 1;
 						}
 					},
 					error: reject,
@@ -47,46 +74,25 @@ export default async function observableToPromise(value, {maximumValues = undefi
 	});
 }
 
-function getObservableLibrary(observable) {
-	if (observable.constructor) {
-		const constructorName = observable.constructor.name;
-		console.log('constructorName', constructorName);
-		switch (constructorName) {
-			case 'Observable': {
-				return 'RxJS';
-			}
-
-			case 'Stream': {
-				return 'Most.js';
-			}
-
-			case 'ZenObservable': {
-				return 'Zen Observable';
-			}
-
-			case 'XStream': {
-				return 'xstream';
-			}
-
-			default: {
-				return 'Unknown';
-			}
-		}
+async function getObservableLibrary(observable) {
+	const rxjs = await import('rxjs');
+	if (observable instanceof rxjs.Observable) {
+		return 'RxJS';
 	}
 
-	return 'Unknown';
+	const most = await import('most');
+	if (observable instanceof most.Stream) {
+		return 'RxJS';
+	}
+
+	return 'unknown';
 }
 
-async function getTakeWhileForLibrary(observable) {
+async function getTakeWhileBasedOnLibrary(observable) {
 	const library = getObservableLibrary(observable);
 
 	if (library === 'RxJS') {
 		const {takeWhile} = await import('rxjs');
-		return takeWhile;
-	}
-
-	if (library === 'Most.js') {
-		const {takeWhile} = await import('most/dist/most');
 		return takeWhile;
 	}
 
