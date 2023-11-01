@@ -31,6 +31,10 @@ function testWithALibAndOptions([libraryName, fromArray, failed]) {
 		t.deepEqual(await toPromise(fromArray(fixture), {maximumValues}), fixture.slice(0, maximumValues));
 	});
 
+	test(`${libraryName}: with maximum values equal 2`, async t => {
+		t.deepEqual(await toPromise(fromArray(fixture), {maximumValues: 2}), fixture.slice(0, 2));
+	});
+
 	test(`${libraryName}: with 0 maximum value`, async t => {
 		t.deepEqual(await toPromise(fromArray(fixture), {maximumValues: 0}), fixture.slice(0, 0));
 	});
@@ -39,7 +43,7 @@ function testWithALibAndOptions([libraryName, fromArray, failed]) {
 		await t.throwsAsync(toPromise(failed(), {maximumValues: 2}));
 	});
 
-	test(`observableToPromise - ${libraryName}: throws on negative maximum value`, async t => {
+	test(`${libraryName}: throws on negative maximum value`, async t => {
 		await t.throwsAsync(toPromise(fromArray(fixture), {maximumValues: -2}));
 	});
 }
@@ -47,8 +51,8 @@ function testWithALibAndOptions([libraryName, fromArray, failed]) {
 // Run tests for the list of libraries
 function testWithLibs(libraries) {
 	for (const library of libraries) {
-		testWithALibAndOptions(library);
 		testWithALib(library);
+		testWithALibAndOptions(library);
 	}
 }
 

@@ -1,4 +1,3 @@
-
 import isObservable from 'is-observable';
 import symbolObservable from 'symbol-observable';
 
@@ -14,87 +13,38 @@ export default async function observableToPromise(value, {maximumValues = undefi
 	}
 
 	if (maximumValues < 0) {
-		throw new Error(`Expected \`maximumValues higher than 0\`, got \`${maximumValues}\``);
+		throw new Error(`Expected \`maximumValues\` higher than 0, got \`${maximumValues}\``);
 	}
 
-	const takeWhile = await getTakeWhileBasedOnLibrary(value);
+	if (value.slice && maximumValues !== undefined) {
+		value = value.slice(0, maximumValues);
+	}
 
 	const values = [];
-	let count = 1;
+	let count = 0;
 
 	return new Promise((resolve, reject) => {
-		if (maximumValues === undefined) {
-			value[symbolObservable.default]()
-				.subscribe({
-					next(value) {
+		value[symbolObservable.default]()
+			.subscribe({
+				next(value) {
+					if (maximumValues === undefined) {
 						values.push(value);
-					},
-					error: reject,
-					complete() {
-						resolve(values);
-					},
-				});
-			return;
-		}
+					}
 
-		if (getObservableLibrary(value) === 'RxJS') {
-			console.log('rxjs');
-			value[symbolObservable.default]()
-				.pipe(takeWhile(() => count <= maximumValues))
-				.subscribe({
-					next(value) {
-						if (maximumValues > 0 && count <= maximumValues) {
-							values.push(value);
-							count += 1;
-						}
-					},
-					error: reject,
-					complete() {
-						resolve(values);
-					},
-				});
-			return;
-		}
+					if (maximumValues > 0 && count < maximumValues) {
+						values.push(value);
+						count += 1;
+					}
 
-		if (takeWhile === undefined) {
-			value[symbolObservable.default]()
-				.subscribe({
-					next(value) {
-						if (maximumValues > 0 && count <= maximumValues) {
-							values.push(value);
-							count += 1;
-						}
-					},
-					error: reject,
-					complete() {
+					if (count >= maximumValues) {
 						resolve(values);
-					},
-				});
-		}
+						console.log(count);
+					}
+				},
+				error: reject,
+				complete() {
+					resolve(values);
+				},
+			});
 	});
-}
-
-async function getObservableLibrary(observable) {
-	const rxjs = await import('rxjs');
-	if (observable instanceof rxjs.Observable) {
-		return 'RxJS';
-	}
-
-	const most = await import('most');
-	if (observable instanceof most.Stream) {
-		return 'RxJS';
-	}
-
-	return 'unknown';
-}
-
-async function getTakeWhileBasedOnLibrary(observable) {
-	const library = getObservableLibrary(observable);
-
-	if (library === 'RxJS') {
-		const {takeWhile} = await import('rxjs');
-		return takeWhile;
-	}
-
-	return undefined;
 }
